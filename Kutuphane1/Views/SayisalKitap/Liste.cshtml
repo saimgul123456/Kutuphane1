@@ -1,0 +1,148 @@
+﻿@model IEnumerable<Kutuphane1.Models.SayisalKitap>
+@{
+	ViewData["Title"] = "Sayısal Kitap Listesi";
+}
+
+
+<div class="row">
+	<div class="col-xxl-12">
+		<div class="card card-xxl-stretch mb-5 mb-xl-8">
+			<div class="card-header border-0 pt-5" x>
+				<button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+					Filtre Paneli
+				</button>
+			</div>
+
+			<div class="collapse show" id="collapseExample">
+				<div class="card card-body" style="padding: 1rem 2.25rem !important;">
+					<div class="card-body py-3">
+						<div class="row">
+
+
+							<div class="col-md-4">
+								<div class="mb-5">
+									<label class="form-label">Başlangıç Tarihi</label>
+									<input type="date" class="form-control" id="deBaslangicTarihi" />
+								</div>
+								<div class="mb-5">
+									<label class="form-label">Bitiş Tarihi</label>
+									<input type="date" class="form-control" id="deBitisTarihi" />
+								</div>
+								<button class="btn btn-info mt-6" type="button" id="btnAktar">Aktar</button>
+								<button class="btn btn-outline-warning mt-6" type="button" id="btnFiltrele">Filtrele</button>
+								<a class="btn btn-warning mt-6" type="button" asp-action="TumListeGetir" asp-controller="SayisalKitap">Filtre Temizle</a>
+							</div>
+							<div class="col-md-4">
+								<div class="mb-5">
+									<label class="form-label">KitapAdi</label>
+									<select asp-items="ViewBag.KitapAdi" multiple="multiple" name="drpSayisalKitap" class="form-control" data-control="select2" id="drpKitapAdi">
+										<option value="-1">Seçiniz</option>
+									</select>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xxl-12">
+		<div class="card card-xxl-stretch mb-5 mb-xl-8">
+			<div class="card-header border-0 pt-5">
+				<h3 class="card-title align-items-start flex-column">
+					<span class="card-label fw-bolder fs-3 mb-1">Sayisal Kitap Listesi</span>
+				</h3>
+
+				<div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover" title="">
+					@*<a asp-action="Ekle" class="btn btn-light-primary float-end">
+							<i class="fa fa-plus"></i>Yeni Ortak Raf'a ekle
+						</a>*@
+					<a asp-action="Ekle" class="btn btn-light-primary float-end">
+						<i class="fa fa-plus"></i> Sayısal Kitap Tablosuna Ekle
+					</a>
+
+				</div>
+			</div>
+
+			<div class="card-body py-3" id="dvListe">
+				<partial model="@Model" name="_ListePartial" />
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts{
+	<script>
+		$('document').ready(function () {
+			InitDatatables();
+		});
+		$("#btnFiltrele").on('click',
+			function () {
+				/*   console.log("Filtrele başladı.");*/
+				var kitapAdi = $("#drpKitapAdi").val();
+				var baslangicTarihi = $("#deBaslangicTarihi").val();
+				var bitisTarihi = $("#deBitisTarihi").val();
+
+				var model = {}; //controller a gidecek veri kümesi
+				model.KitapAdiId = kitapAdi;
+				model.BaslangicTarihi = baslangicTarihi === '' ? null : baslangicTarihi;
+				model.BitisTarihi = bitisTarihi === '' ? null : bitisTarihi;
+
+				console.log(model);
+				$.ajax({
+					url: `/SayisalKitap/Filtrele`,
+					type: "POST",
+					dataType: "html",
+					contentType: "application/json; charset=utf-8",
+					data: JSON.stringify(model),
+					processData: false,
+					cache: false,
+					success: function (response) {
+						$("#dvListe").html("");
+						$("#dvListe").html(response);
+					},
+					complete: function () {
+						InitDatatables();
+					}
+				});
+			});
+		$("#btnAktar").on('click',
+			function () {
+				var satirlar = [];
+				var table = $("#tblListe").DataTable();
+
+				table.rows().every(function (index, x, y) {
+					var data = this.node();
+
+					if ($(data).find('input').prop('checked')) {
+						satirlar.push(parseInt($(data).find("td:eq(1)").text()));
+					}
+				});
+
+				$.ajax({
+					url: `/SayisalKitap/Aktar`,
+					type: "POST",
+					dataType: "html",
+					contentType: "application/json; charset=utf-8",
+					data: JSON.stringify(satirlar),
+					processData: false,
+					cache: false,
+					success: function (response) {
+						toastr["success"]("Aktarım başarılı");
+					},
+					complete: function () {
+						//InitDatatables();
+					},
+					error: function (response) {
+						toastr["error"]("Hata oldu. " + response);
+					}
+				});
+			});
+
+	</script>
+}
+

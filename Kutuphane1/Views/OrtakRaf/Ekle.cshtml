@@ -1,0 +1,83 @@
+﻿@model OrtakRaf
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-xxl-12">
+        <div class="card card-xxl-stretch mb-5 mb-xl-8">
+
+
+            <div class="card-header border-0 pt-5">
+                <h3 class="card-title align-items-start flex-column">
+                    <span class="card-label fw-bolder fs-3 mb-1">Yeni Ortak Raf Listesine Ekle</span>
+                </h3>
+
+            </div>
+            <div class="card-body">
+                <form asp-action="Ekle">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="mb-5">
+                        <div class="mb-5">
+                            <label asp-for="KAYİTTARİHİ" class="form-label"></label>
+                            <input asp-for="KAYİTTARİHİ" class="form-control" />
+                            <span asp-validation-for="KAYİTTARİHİ" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <label class="form-label">Kitap Adı</label>
+                        <select asp-items="@ViewBag.ListKitap" class="form-control" data-dropup-auto="false" id="ddlKitapId" name="ddlKitaplar">
+                            <option value="-1">Seçiniz</option>
+                        </select>
+                    </div>
+                    <div class="mb-5">
+                        <div class="mb-5">
+                            <label asp-for="ADET" class="form-label"></label>
+                            <input asp-for="ADET" class="form-control" />
+                            <span asp-validation-for="ADET" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <div class="mb-5">
+                            <input asp-for="excelKodu" class="form-control" readonly="readonly" value="@ViewBag.RandomVeri"/>
+                        </div>
+                    </div>
+                    <a class="btn btn-secondary mr-2" asp-action="Liste">
+                        <i class="fa fa-arrow-left"></i> Listeye Geri Dön
+                    </a>
+                    <button type="submit" class="btn btn-success" id="btnEkle">
+                        <i class="fa fa-check"></i> Kaydet
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*@section Scripts{
+    <script>
+
+        $("#btnEkle").on('click',
+            function() {
+                var selectedItems = [];
+
+                selectedItems.push($('#ddlKitapId').find('option').filter(':selected').val());
+                selectedItems.push($('#ddlKitapId').find('option').filter(':selected').text());
+
+                console.log(selectedItems);
+
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(selectedItems),
+                    datatype: 'JSON',
+                    processData: false,
+                    cache: false,
+                    success: function(response) { },
+                    error: function(response) { }
+                });
+
+            });
+    </script>
+}*@

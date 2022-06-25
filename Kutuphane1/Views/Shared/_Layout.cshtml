@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+
+<html lang="tr">
+<head>
+    <meta charset="utf-8" encoding="utf8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="Content-Type" content="text/html; charset:windows-1254"/>
+    <meta http-equiv="content-language" content="tr"/>
+
+    <title>@ViewData["Title"] - Kutuphane1</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/lib/datatable/jquery.dataTables.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css"/>
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light" style="background-color: #00FFFF;">
+        @*<nav class="navbar navbar-expand-lg navbar-dark bg-">*@
+        @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">*@
+        @*<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Kutuphane1</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>*@
+
+        <a class="navbar-brand mb-0" href="#">
+            @*<img src="Logo.png" alt="" width="80" height="80" class="">*@
+            <span class="h1-custom align-middle">Kütüphane1</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse " id="navbarNav">
+            <ul class="navbar-nav m-auto">
+                <li class="nav-item active">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="OrtakRaf" asp-action="Liste">Ortak Raf Listesi</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="KitapAdi" asp-action="Liste">Kitap Adı Listesi</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="SayisalKitap" asp-action="Liste">Sayısal Kitap Listesi</a>
+                </li>
+
+                @*<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Anasayfa</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="OrtakRaf" asp-action="Liste">Ortak Raf Listesi</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="KitapAdi" asp-action="Liste">Kitap Adı Listesi</a>
+                    </l
+                    <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                    </li>*@
+            </ul>
+        </div>
+    </nav>
+</header>
+<div class="container">
+    <main role="main" class="pb-3">
+        @await Html.PartialAsync("_NotificationPanel")
+        @RenderBody()
+    </main>
+</div>
+
+<footer class="border-top footer text-muted">
+    <div class="container">
+        &copy; 2022 - Kutuphane1 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </div>
+</footer>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/jquery-3.6.0.min.js"></script>
+<script src="~/lib/datatable/jquery.dataTables.min.js" asp-append-version="true"></script>
+@*<script src="~/lib/jquery/dist/jquery.min.js"></script>*@
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", false)
+</body>
+</html>

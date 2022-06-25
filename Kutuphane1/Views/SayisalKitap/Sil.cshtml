@@ -1,0 +1,61 @@
+﻿@model SayisalKitap
+@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+<div class="row">
+    <div class="col-xxl-12">
+        <div class="card card-xxl-stretch mb-5 mb-xl-8">
+            <div class="card-header border-0 pt-5">
+                <h3 class="card-title align-items-start flex-column">
+                    <span class="card-label fw-bolder fs-3 mb-1">Sayısal Kitap Adı Silme (Pasife Alma</span>
+                </h3>
+            </div>
+            <div class="card-body">
+                <form asp-action="Sil">
+                    <input type="hidden" asp-for="Id"/>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="mb-5">
+                        <label asp-for="KAYİTTARİHİ" class="form-label"></label>
+                        <input asp-for="KAYİTTARİHİ" class="form-control" disabled/>
+                        <span asp-validation-for="KAYİTTARİHİ" class="text-danger"></span>
+                    </div>
+                    <div class="mb-5">
+                        <label asp-for="KİTAPADİ" class="form-label"></label>
+                        <input asp-for="KİTAPADİ" class="form-control" disabled/>
+                        <span asp-validation-for="KİTAPADİ" class="text-danger"></span>
+                    </div>
+                    <div class="mb-5">
+                        <label asp-for="ADET" class="form-label"></label>
+                        <input asp-for="ADET" class="form-control" disabled/>
+                        <span asp-validation-for="ADET" class="text-danger"></span>
+                    </div>
+                    <div class="mb-5">
+                        <label asp-for="FİYAT" class="form-label"></label>
+                        <input asp-for="FİYAT" class="form-control" disabled/>
+                        <span asp-validation-for="FİYAT" class="text-danger"></span>
+                    </div>
+                    <div class="mb-5">
+                        <label asp-for="TUTAR" class="form-label"></label>
+                        <input asp-for="TUTAR" class="form-control" disabled/>
+                        <span asp-validation-for="TUTAR" class="text-danger"></span>
+                    </div>
+                    <div class="mb-5">
+                        <label asp-for="KDV" class="form-label"></label>
+                        <input asp-for="KDV" class="form-control"disabled/>
+                        <span asp-validation-for="KDV" class="text-danger"></span>
+                    </div>
+                    <div class="mb-5">
+                        <label asp-for="TOPLAMTUTAR" class="form-label"></label>
+                        <input asp-for="TOPLAMTUTAR" class="form-control"disabled/>
+                        <span asp-validation-for="TOPLAMTUTAR" class="text-danger"></span>
+                    </div>
+                    <div class="mb-5">
+                        <label asp-for="Aktif" class="form-label"></label>
+                        <input type="checkbox" asp-for="Aktif" class="form-control"disabled/>
+                        <span asp-validation-for="Aktif" class="text-danger"></span>
+                    </div>
+                    <a class="btn btn-secondary mr-2" asp-action="Liste"><i class="fa fa-arrow-left"></i> Listeye Geri Dön</a> <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Sil</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
