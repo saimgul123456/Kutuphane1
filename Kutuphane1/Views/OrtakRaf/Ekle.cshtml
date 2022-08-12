@@ -1,0 +1,145 @@
+﻿@model OrtakRaf
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Ortak Rafa Kitap Ekle";
+}
+
+<style>
+    input.editable-select {
+        background: #FFF url(images/arrow-down.gif) right center no-repeat;
+        padding-right: 13px;
+        cursor: pointer;
+    }
+</style>
+
+<div class="row pt-3">
+    <div class="col-xxl-12">
+        <div class="card mb-5 mb-xl-2">
+            <div class="card-header border-0 pt-2">
+                <h3 class="card-title align-items-start flex-column">
+                    <span class="card-text fw-bolder fs-3 mb-1">Yeni Ortak Raf Listesine Ekle</span>
+                </h3>
+
+            </div>
+            <div class="card-body">
+                <form asp-action="Ekle" asp-controller="OrtakRaf" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="mb-3">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label asp-for="KAYİTTARİHİ" class="input-group-text" id="KayitTarihi"></label>
+                            </div>
+                            <input asp-for="KAYİTTARİHİ" class="form-control" />
+                            <span asp-validation-for="KAYİTTARİHİ" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" asp-for="KİTAPADİ" style="padding-right:1.45rem"></label>
+                        </div>
+                        <datalist id="KitapListesi" class="dropdown-menu-dark">
+                            @foreach (var item in (List<OrtakRaf>)ViewBag.KitapListesi)
+                            {
+                                <option id="@item.Id" data-id="@item.KitapAdiId" value="@item.KİTAPADİ" />
+                            }
+                        </datalist>
+                        <input type="search" list="KitapListesi" class="form-control" id="dtlKitapId" name="dtlKitapAdi" autocomplete="on" placeholder="Seçiniz" />
+                    </div>
+                    <div class="mb-5">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label asp-for="ADET" class="input-group-text" style="padding-right:3.35rem"></label>
+                            </div>
+                            <input asp-for="ADET" class="form-control text-right" placeholder="0" />
+                            <span asp-validation-for="ADET" class="text-danger"></span>
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" style="padding-right:3.45rem">Fiyat</label>
+                            </div>
+                            <input id="KitapAdi.FIYAT" name="KitapAdi.FIYAT" class="form-control text-right number-decimal bg-light" , placeholder="0,00" type="number" />
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text bg-primary text-white" asp-for="excelKodu">Excel Kodu</label>
+                            </div>
+                            <input asp-for="excelKodu" class="form-control bg-light" readonly="readonly" value="@ViewBag.RandomVeri" />
+                        </div>
+                    </div>
+                    <a class="btn btn-secondary mr-2" asp-action="Liste">
+                        <i class="fa fa-arrow-left"></i> Listeye Geri Dön
+                    </a>
+                    <button type="submit" class="btn btn-success" id="btnEkle">
+                        <i class="fa fa-check"></i> Kaydet
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#btnEkle").click(function(e) {
+                e.preventDefault();
+                var inputSelect = $('input[name=dtlKitapAdi]:input').val();
+                var kitapAdi = $('option[value="' + inputSelect + '"]').val();
+                var kitapAdiId = $('option[value="' + inputSelect + '"]').attr('data-id');
+              var kitapId = $('option[value="' + inputSelect + '"]').attr('id');
+
+
+
+                var kayitTarihi = $('input[name=KAYİTTARİHİ]').val();
+                var excelKodu = $('input[name=excelKodu]').val();
+                var adet = $('input[name=ADET]').val();
+                var fiyat = $('input[name="KitapAdi.FIYAT"]').val();
+
+                if (kitapAdi == null) {
+                    kitapAdi = inputSelect;
+                }
+
+                var OrtakRaf = {
+                    KİTAPADİ: kitapAdi,
+                    Id: kitapId,
+                    KitapAdiId: kitapAdiId,
+                    KAYİTTARİHİ: kayitTarihi,
+                    excelKodu,
+                    ADET: adet,
+                    FIYAT: fiyat
+                }
+
+                console.log(OrtakRaf);
+
+                $.ajax({
+                    url: '@Url.Action("Ekle", "OrtakRaf")',
+                    type: 'POST',
+                    dataType: 'html',
+                    data: OrtakRaf,
+                    success: function() {
+                        Swal.fire({
+                            position: 'bottom-end',
+                            icon: 'success',
+                            title: `Ortak Rafa ${kitapAdi} kitabının ${adet} adet kaydı gerçekleşti.`,
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
+                        setTimeout(function() {
+                            window.location.href = `/OrtakRaf/Liste`;
+                        },
+                            3000);
+                    },
+                    error: function(data) {
+                        Swal.fire({
+                            position: 'bottom-end',
+                            icon: 'error',
+                            title: `Ortak Rafa ${kitapAdi} kitabının kaydı başarısız oldu.`,
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

@@ -1,0 +1,110 @@
+﻿@page
+@model LoginModel
+
+@{
+	ViewData["Title"] = "";
+	Layout = null;
+}
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+</head>
+
+<body style="background-color:blanchedalmond">
+
+
+
+</body>
+
+</html>
+
+<h1>@ViewData["Title"]</h1>
+
+@*//Bu kısımdan sonrası yapılandırıldı.*@
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Bootstrap 5 - Login Form</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" />
+</head>
+<section>
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+
+	<body class="main-bg">
+		<!-- Login Form -->
+		<div class="container">
+			<div class="row justify-content-center mt-5">
+				<div class="col-lg-4 col-md-6 col-sm-6">
+					<div class="card shadow">
+						<div class="card-title text-center border-bottom">
+							<h2 class="p-3">Login</h2>
+						</div>
+						<div class="card-body">
+							<form id="account" method="post">
+								<div align="center">
+									<label asp-for="Input.Email"></label>
+									<input asp-for="Input.Email" class="form-control" />
+									<span asp-validation-for="Input.Email" class="text-danger"></span>
+								</div>
+								<div align="center">
+									<label asp-for="Input.Password"></label>
+									<input asp-for="Input.Password" class="form-control" />
+									<span asp-validation-for="Input.Password" class="text-danger"></span>
+								</div>
+								<div align="center">
+									<div class="checkbox">
+										<label asp-for="Input.RememberMe">
+											<input asp-for="Input.RememberMe" />
+											@Html.DisplayNameFor(m => m.Input.RememberMe)
+										</label>
+									</div>
+								</div>
+								<div align="center">
+									<button type="submit" class="btn btn-primary">Log in</button>
+								</div>
+								<div align="center">
+									<p>
+										<a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+									</p>
+									<p>
+										<a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+									</p>
+									<p>
+										<a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
+									</p>
+								</div>
+
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+
+	
+
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+
+
+
+
+	@section Scripts {
+		<partial name="_ValidationScriptsPartial" />
+	}

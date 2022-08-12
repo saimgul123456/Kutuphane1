@@ -1,0 +1,79 @@
+﻿@model SayisalKitap
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+	<div class="col-xxl-12 gy-md-3 pt-3">
+		<div class="card card-xxl-stretch mb-5 mb-xl-8">
+			<div class="card-header border-0 pt-3 text-center">
+				<h3 class="card-title align-items-start flex-column">
+					<span class="card-title fw-bolder fs-3 mb-1">Sayisal Kitap Adı Güncelle</span>
+				</h3>
+			</div>
+			<div class="card-body">
+				<form asp-action="Guncelle">
+					<input type="hidden" asp-for="Id" />
+					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+					<div class="input-group mb-3">
+						<div class="input-group-prepend">
+							<label asp-for="KAYİTTARİHİ" class="input-group-text" style="padding-right:1.75rem"></label>
+						</div>
+						<input asp-for="KAYİTTARİHİ" class="form-control" />
+						<span asp-validation-for="KAYİTTARİHİ" class="text-danger"></span>
+					</div>
+					<div class="input-group mb-3">
+						<div class="input-group-prepend">
+							<label asp-for="KİTAPADİ" class="input-group-text" style="padding-right:1.75rem"></label>
+						</div>
+						<input asp-for="KİTAPADİ" class="form-control" />
+						<span asp-validation-for="KİTAPADİ" class="text-danger"></span>
+					</div>
+					<div class="input-group mb-3">
+						<div class="input-group-prepend">
+							<label asp-for="ADET" class="input-group-text" style="padding-right:4.45rem"></label>
+						</div>
+						<input asp-for="ADET" class="form-control text-right" />
+						<span asp-validation-for="ADET" class="text-danger"></span>
+					</div>
+					<div class="input-group mb-3">
+						<div class="input-group-prepend">
+							<label asp-for="FİYAT" class="input-group-text" style="padding-right: 4.45rem"></label>
+						</div>
+						<input asp-for="FİYAT" class="form-control text-right number-decimal" type="number" />
+						<span asp-validation-for="FİYAT" class="text-danger"></span>
+					</div>
+					<div class="input-group mb-3">
+						<div class="input-group-prepend">
+							<label asp-for="TUTAR" class="input-group-text" style="padding-right:4.25rem"></label>
+						</div>
+						<input asp-for="TUTAR" class="form-control text-right number-decimal" type="number" />
+						<span asp-validation-for="TUTAR" class="text-danger"></span>
+					</div>
+					<div class="input-group mb-3">
+						<div class="input-group-prepend">
+							<label asp-for="KDV" class="input-group-text" style="padding-right:4.75rem"></label>
+						</div>
+						<input asp-for="KDV" class="form-control text-right number-decimal" type="number" />
+						<span asp-validation-for="KDV" class="text-danger"></span>
+					</div>
+					<div class="input-group mb-3">
+						<div class="input-group-prepend">
+							<label asp-for="TOPLAMTUTAR" class="input-group-text"></label>
+						</div>
+						<input asp-for="TOPLAMTUTAR" class="form-control text-right number-decimal" type="number" />
+						<span asp-validation-for="TOPLAMTUTAR" class="text-danger"></span>
+					</div>
+					<div class="input-group mb-3">
+						<div class="input-group-prepend">
+							<label asp-for="Aktif" class="input-group-text" style="padding-right:4.45rem"></label>
+						</div>
+						<input type="checkbox" asp-for="Aktif" class="form-control" style="margin-right: 10rem;" />
+						<span asp-validation-for="Aktif" class="text-danger"></span>
+					</div>
+					<a class="btn btn-secondary mr-2" asp-action="Liste"><i class="fa fa-arrow-left"></i> Listeye Geri Dön</a> <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Kaydet</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

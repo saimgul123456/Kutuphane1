@@ -1,0 +1,44 @@
+﻿@model KitapAdi
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-xxl-12 gy-md-3 pt-3">
+        <div class="card card-xxl-stretch mb-5 mb-xl-8">
+            <div class="card-header border-0 pt-3 text-center">
+                <h3 class="card-title align-items-start flex-column">
+                    <span class="card-label fw-bolder fs-3 mb-1">Kitap Adı Güncelle</span>
+                </h3>
+            </div>
+            <div class="card-body py-2">
+                <form asp-action="Guncelle">
+                    <input type="hidden" asp-for="Id" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label asp-for="KİTABİNADİ" class="input-group-text"></label>
+                        </div>
+                        <input asp-for="KİTABİNADİ" class="form-control" />
+                        <span asp-validation-for="KİTABİNADİ" class="text-danger"></span>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" style="padding-right:3.35rem">Fiyat</label>
+                        </div>
+                        <input asp-for="FIYAT" class="form-control text-right number-decimal",  placeholder = "0,00" type="number" />
+                        <span asp-validation-for="FIYAT" class="text-danger"></span>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label asp-for="Aktif" class="input-group-text" style="padding-right:3.35rem"></label>
+                        </div>
+                        <input type="checkbox" asp-for="Aktif" class="form-control" style="margin-right: 10rem;"/>
+                        <span asp-validation-for="Aktif" class="text-danger"></span>
+                    </div>
+                    <a class="btn btn-secondary mr-2" asp-action="Liste"><i class="fa fa-arrow-left"></i> Listeye Geri Dön</a> <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Kaydet</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

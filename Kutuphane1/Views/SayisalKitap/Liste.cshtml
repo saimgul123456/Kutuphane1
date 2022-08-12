@@ -1,0 +1,108 @@
+﻿@model IEnumerable<Kutuphane1.Models.SayisalKitap>
+@{
+    ViewData["Title"] = "Sayısal Kitap Listesi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form enctype="application/x-www-form-urlencoded">
+    <div class="row pt-3">
+        <div class="col-xxl-12" style="width: 64.3rem">
+            <div class="card card-xxl-stretch mb-4 mb-lg-4">
+                <div class="card-header border-0 pt-2">
+                    <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-trigger="hover" title="">
+                        <span class="card-label fw-bolder fs-3 mb-1 h4 pr-5">
+                            <i class="fad fa-line-columns"></i> Filtre Paneli
+                        </span>
+                        <a class="btn btn-outline-primary fa-pull-right ml-2" asp-action="TumListeGetir" asp-controller="SayisalKitap">
+                            <i class="fal fa-filter"></i> Filtre Temizle
+                        </a>
+                        <button class="btn btn-outline-info float-right" type="button" id="btnFiltrele" onclick="btnFiltrele">
+                            <i class="fas fa-filter"></i> Filtrele
+                        </button>
+                    </div>
+                </div>
+                <div class="collapse show" id="collapseExample">
+                    <div class="card card-body" style="padding: 0.5rem 1.25rem !important;">
+                        <div class="card-body py-0">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="mb-2">
+                                        <label class="form-label">Başlangıç Tarihi</label>
+                                        <input type="date" class="form-control" id="deBaslangicTarihi" />
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label">Bitiş Tarihi</label>
+                                        <input type="date" class="form-control" id="deBitisTarihi" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-2">
+                                        <label class="form-label">KitapAdi</label>
+                                        <select asp-items="ViewBag.KitapAdi" multiple="multiple" name="drpSayisalKitap" class="form-control" data-control="select2" id="drpKitapAdi">
+                                            <option value="-1">Seçiniz</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xxl-12">
+            <div class="card bg-light mb-3">
+                <div class="card-header">
+                    <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-trigger="hover" title="">
+                        <span class="card-label fw-bolder fs-3 mb-1 h4 pr-5">
+                            <i class="far fa-list-alt"></i> Sayisal Kitap Listesi
+                        </span>
+                        <button class="btn btn-outline-primary fa-pull-right ml-2" id="btnExcel" type="submit" asp-action="ExcelExport" asp-controller="SayisalKitap">
+                            <i class="fas fa-file-excel"></i> Excele Atar
+                        </button>
+                        <button class="btn btn-outline-primary fa-pull-right" id="btnEkle" type="submit" asp-action="Ekle" asp-controller="SayisalKitap">
+                            <i class="fa fa-plus"></i> Sayısal Kitap Ekle
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body py-3" id="dvListe">
+                    <partial model="@Model" name="_ListePartial" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <script>
+        $("#btnFiltrele").on('click',
+            function() {
+                /*   console.log("Filtrele başladı.");*/
+                const kitapAdi = $("#drpKitapAdi").val();
+                const baslangicTarihi = $("#deBaslangicTarihi").val();
+                const bitisTarihi = $("#deBitisTarihi").val();
+
+                const model = {}; //controller a gidecek veri kümesi
+                model.KitapAdiId = kitapAdi;
+                model.BaslangicTarihi = baslangicTarihi === '' ? null : baslangicTarihi;
+                model.BitisTarihi = bitisTarihi === '' ? null : bitisTarihi;
+
+                console.log(model);
+                $.ajax({
+                    url: `/SayisalKitap/Filtrele`,
+                    type: "POST",
+                    dataType: "html",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(model),
+                    processData: false,
+                    cache: false,
+                    success: function(response) {
+                        $("#dvListe").html("");
+                        $("#dvListe").html(response);
+                    }
+                });
+            });
+    </script>
+}

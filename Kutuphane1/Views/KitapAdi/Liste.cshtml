@@ -1,0 +1,118 @@
+﻿@model IEnumerable<KitapAdi>
+@{
+    //ViewData["Title"] = "Kitap Adı Liste";
+}
+
+<style>
+    .table {
+        border-collapse: initial;
+        border-spacing: 0;
+        width: 90%
+    }
+
+    .thead th {
+        background-color: #0080ff;
+        border-color: #454d55;
+        color: #fff;
+        padding: 1px;
+        text-align: center;
+        height: 35px;
+        position: relative;
+        /* text-shadow: 1px 1px 1px #e5e2e2;*/
+    }
+
+    .table td {
+        padding: .19rem;
+    }
+
+    .table td, .table th {
+        vertical-align: middle;
+    }
+
+    thead th:first-child {
+        border-radius: 7px 0 0 0;
+    }
+
+    thead th:last-child {
+        border-radius: 0 7px 0 0;
+    }
+
+    .form-check-input {
+        margin-left: 0;
+    }
+
+    tr:hover td {
+        background-color: #eebfd4;
+    }
+
+    .label {
+        vertical-align: middle;
+    }
+
+    .td .input[type=number]:active, .input[type=number]:focus {
+        background-color: green;
+    }
+</style>
+
+<div class="row">
+    <div class="card-body py-1">
+        <table class="table table-striped gy-md-3 h-50">
+            <thead style="color: #fff; background-color: #0080ff; border-color: #454d55;">
+                <tr class="fw-bolder fs-6 text-gray-700">
+                    <th class="text-center">İşlem</th>
+                    <th class="text-center">
+                        @Html.DisplayNameFor(model => model.Aktif)
+                    </th>
+                    <th class="text-center">
+                        @Html.DisplayNameFor(model => model.KİTABİNADİ)
+                    </th>
+                    <th class="text-center">
+                        Fiyat
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <a asp-action="Guncelle" asp-route-id="@item.Id" data-toggle="tooltip" title="Düzenle" class="btn btn-sm btn-warning"><i class="fa fa-pencil-alt text-primary" style="font-size: 1.0rem"></i> Güncelle</a>
+                            @if (item.Aktif)
+                            {
+                                <a asp-controller="KitapAdi" asp-action="DurumDegistir" asp-route-id="@item.Id" data-toggle="tooltip" title="Pasif Yap"><i class="fa fa-arrow-down text-warning ml-3" style="font-size: 1.0rem"></i> DurumPasifYap</a>
+                            }
+                            else
+                            {
+                                <a asp-controller="KitapAdi" asp-action="DurumDegistir" asp-route-id="@item.Id" data-toggle="tooltip" title="Aktif Yap"><i class="fa fa-arrow-up text-success ml-3" style="font-size: 1.0rem"></i> DurumAktifYap</a>
+                            }
+                            <a asp-action="Sil" asp-route-id="@item.Id" data-toggle="tooltip" title="Sil"><i class="fa fa-trash-alt text-danger ml-2" style="font-size: 1.0rem"></i> Sil</a>
+                            @*<a onclick="Sil(@item.Id)" data-toggle="tooltip" title="Sil"><i class="fa fa-trash-alt text-danger ml-2" style="font-size:1.5rem"></i>Sil </a>*@
+                        </td>
+                        <td>
+                            @if (item.Aktif)
+                            {
+                                <label class="text-success">@item.Aktif</label>
+                            }
+                            else
+                            {
+                                <label class="text-danger">@item.Aktif</label>
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.KİTABİNADİ)
+                        </td>
+                        <td style="width: 7rem">
+                            @Html.TextBoxFor(modelItem=>item.FIYAT, new { @class = "form-control text-right number-decimal", title = "Birim Fiyat", type = "number", style="border: none; background-color: transparent", @readonly="readonly" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div style="margin-right: 7rem">
+            <a asp-controller="KitapAdi" asp-action="Ekle" class="btn btn-primary fa-pull-right">
+                <i class="fa fa-plus"></i> Yeni Kitap Adı Ekle
+            </a>
+        </div>
+    </div>
+
+</div>

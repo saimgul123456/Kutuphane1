@@ -1,0 +1,145 @@
+﻿@model IEnumerable<Kutuphane1.Models.SayisalKitap>
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+
+<style>
+	table {
+		border-collapse: initial;
+		border-spacing: 0;
+	}
+
+	thead th {
+		background-color: #0080ff;
+		border-color: #454d55;
+		color: #fff;
+		padding: 10px;
+		text-align: center;
+		height: 35px;
+		position: relative;
+		/* text-shadow: 1px 1px 1px #e5e2e2;*/
+	}
+
+	.table td {
+		padding: .19rem;
+	}
+
+	thead th:first-child {
+		border-radius: 7px 0 0 0;
+	}
+
+	thead th:last-child {
+		border-radius: 0 7px 0 0;
+	}
+
+	.form-check-input {
+		margin-left: 0;
+	}
+
+	tr:hover td {
+		background-color: #eebfd4;
+	}
+
+	.form-text :focus {
+		border-color: inherit;
+		-webkit-box-shadow: none;
+		box-shadow: none;
+	}
+
+	.form-text :active {
+		border-color: inherit;
+		-webkit-box-shadow: none;
+		box-shadow: none;
+	}
+
+	textarea:focus, input:focus {
+		outline: none;
+	}
+</style>
+<table id="sayisalKitapListe" class="table table-striped table-hover gy-5">
+	<thead style="color: #fff; background-color: #0080ff; border-color: #454d55;">
+		<tr class="fw-bolder fs-6 text-gray-700">
+			<th class="text-center">#</th>
+			<th class="text-center">İşlem</th>
+			<th class="text-center">
+				@Html.DisplayNameFor(model => model.Aktif)
+			</th>
+			<th class="text-center">
+				@Html.DisplayNameFor(model => model.KAYİTTARİHİ)
+			</th>
+			<th class="text-center">
+				@Html.DisplayNameFor(model => model.KİTAPADİ)
+			</th>
+			<th class="text-center">
+				@Html.DisplayNameFor(model => model.ADET)
+			</th>
+
+			<th class="text-center">
+				@Html.DisplayNameFor(model => model.FİYAT)
+			</th>
+			<th class="text-center">
+				@Html.DisplayNameFor(model => model.TUTAR)
+			</th>
+			<th class="text-center">
+				@Html.DisplayNameFor(model => model.KDV)
+			</th>
+			<th class="text-center">
+				@Html.DisplayNameFor(model => model.TOPLAMTUTAR)
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr style="height: 35px">
+				<td class="pt-2">
+					@Html.CheckBox("checkedRow", false, new { @class = "form-check-input", value = @item.Id, @id = "ceSayisalKitapId" })
+				</td>
+				<td>
+					<a asp-action="Guncelle" asp-route-id="@item.Id" data-toggle="tooltip" title="Düzenle"><i class="fas fa-pencil-alt text-primary" style="font-size: 1.0rem"></i> Düzenle </a>
+					@if (item.Aktif)
+					{
+						<a asp-controller="SayisalKitap" asp-action="DurumDegistir" asp-route-id="@item.Id" data-toggle="tooltip" title="Pasif Yap"><i class="fa fa-arrow-down text-warning ml-3" style="font-size: 1.0rem"></i> DurumPasifYap </a>
+					}
+					else
+					{
+						<a asp-controller="SayisalKitap" asp-action="DurumDegistir" asp-route-id="@item.Id" data-toggle="tooltip" title="Aktif Yap"><i class="fa fa-arrow-up text-success ml-3" style="font-size: 1.0rem"></i> DurumAktifYap </a>
+					}
+
+					<a asp-action="Sil" asp-route-id="@item.Id" data-toggle="tooltip" title="Sil"><i class="fa fa-trash-alt text-danger ml-2" style="font-size: 1.0rem"></i> Sil</a>
+				</td>
+				<td class="text-center pt-2">
+					@if (item.Aktif)
+					{
+						<label class="text-success">@item.AktifString</label>
+					}
+					else
+					{
+						<label class="text-danger">@item.AktifString</label>
+					}
+				</td>
+				<td class="text-center pt-2">
+					@Html.DisplayFor(modelItem => item.KAYİTTARİHİ)
+				</td>
+				<td id="xlsKitapAdi" class="pt-2">
+					@Html.DisplayFor(modelItem => item.KİTAPADİ)
+				</td>
+				<td class="text-right pr-3 pt-2">
+					@Html.DisplayFor(modelItem => item.ADET)
+				</td>
+				<td class="text-right pr-3 pt-2">
+					@Html.TextBoxFor(modelItem => item.FİYAT, new { @class = "form-text text-right number-decimal", @type = "number", @readonly = "readonly", @style = "width: 90px;border-color: transparent;-webkit-box-shadow: none; box-shadow: none;border: none;background-color: transparent" })
+				</td>
+				<td class="text-right pr-3 pt-2">
+					@Html.TextBoxFor(modelItem => item.TUTAR, new { @class = "form-text text-right number-decimal", @type = "number", @readonly = "readonly", @style = "width: 90px;border-color: transparent;-webkit-box-shadow: none; box-shadow: none;border: none;background-color: transparent" })
+				</td>
+				<td class="text-right pr-3 pt-2">
+					@Html.TextBoxFor(modelItem => item.KDV, new { @class = "form-text text-right number-decimal", @type = "number", @readonly = "readonly", @style = "width: 70px;border-color: transparent;-webkit-box-shadow: none; box-shadow: none;border: none;background-color: transparent" })
+				</td>
+				<td class="text-right pr-3 pt-2">
+					@Html.TextBoxFor(modelitem => item.TOPLAMTUTAR, new { @class = "form-text text-right number-decimal", @type = "number", @readonly = "readonly", @style = "width: 90px;border-color: transparent;-webkit-box-shadow: none; box-shadow: none;border: none;background-color: transparent" })
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+@*@Html.PagedListPager((IPagedList)Model, page=>Url.Action("-ListePartial",new{page}))*@

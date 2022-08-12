@@ -1,0 +1,215 @@
+﻿@model IEnumerable<OrtakRaf>
+@{
+    ViewData["Title"] = "Ortak Raf Kitap Listesi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    input[type="file"] {
+        display: none;
+    }
+
+    .custom-file-upload {
+        border: 1px solid #ccc;
+        display: inline-block;
+        margin-top: 7px;
+        padding: 7px 12px;
+        cursor: pointer;
+    }
+</style>
+
+
+
+<div class="form-group mb-0">
+    <form action="Importexcel" method="post" enctype="multipart/form-data">
+        <label class="custom-file-upload btn btn-outline-primary">
+            <input type="file" name="dosya" />
+            <i class="fas fa-file"></i>
+            Dosya Seçin
+        </label>
+        <input type="text" name="excelKodu" value="@ViewBag.RandomVeri" readonly class="form-control" style="width: 5.5rem; display: inline-block; margin-left: 0.75rem" />
+
+        <button type="submit" class="btn btn-outline-success">
+            <i class="fas fa-file-import"></i> Excel Yükle
+        </button>
+    </form>
+</div>
+
+<form enctype="application/x-www-form-urlencoded">
+    <div class="row">
+        <div class="col-xxl-12" style="width: 51.4rem">
+            <div class="card mb-4 mb-lg-4">
+                <div class="card-header border-0 pt-2">
+                    <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-trigger="hover" title="">
+                        <span class="card-text fw-bolder fs-3 mb-1 h4 pr-5">
+                            <i class="fad fa-line-columns"></i> Filtre Paneli
+                        </span>
+                        <a class="btn btn-outline-primary fa-pull-right ml-2" asp-action="TumListeGetir" asp-controller="OrtakRaf">
+                            <i class="fal fa-filter"></i> Filtre Temizle
+                        </a>
+                        <button class="btn btn-outline-info float-right" type="button" id="btnFiltrele" onclick="btnFiltrele">
+                            <i class="fas fa-filter"></i> Filtrele
+                        </button>
+                    </div>
+                </div>
+
+                <div class="collapse show" id="collapseExample">
+                    <div class="card card-body" style="padding: 0.5rem 1.25rem !important;">
+                        <div class="card-body py-0">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="mb-2">
+                                        <label class="form-label">Başlangıç Tarihi</label>
+                                        <input type="date" class="form-control" id="deBaslangicTarihi" />
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label">Bitiş Tarihi</label>
+                                        <input type="date" class="form-control" id="deBitisTarihi" />
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="mb-2">
+                                        <div class="form-group">
+                                            <label class="form-label">KitapAdi</label>
+                                            <select asp-items="ViewBag.KitapAdi" multiple="multiple" name="drpOrtakRaf" class="js-example-basic-multiple w-100" id="drpKitapAdi">
+                                                <option value="-1">Seçiniz</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xxl-12">
+            <div class="card bg-light mb-3">
+                <div class="card-header">
+                    <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-trigger="hover" title="">
+                        <span class="card-text fw-bolder fs-3 mb-1 h4 pr-5">
+                            <i class="far fa-list-alt"></i> Ortak Raf Listesi
+                        </span>
+
+                        <button class="btn btn-outline-info float-right ml-2" type="button" id="btnAktar">
+                            <i class="fad fa-random"></i> Aktar
+                        </button>
+                        <a asp-action="Ekle" class="btn btn-outline-primary fa-pull-right">
+                            <i class="fa fa-plus"></i> Ortak Rafa Ekle
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body py-2 px-2" id="dvListe">
+                    <partial model="@Model" name="_ListePartial" id="tblListe" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-outline-primary fa-pull-right ml-2" id="btnExcel" type="submit" asp-action="ExcelExport" asp-controller="OrtakRaf">
+        <i class="fas fa-file-excel"></i> Excele Atar
+    </button>
+</form>
+
+@section Scripts{
+    <script type="text/javascript">
+        $("#btnFiltrele").on('click',
+            function() {
+                const kitapAdi = $("#drpKitapAdi").val();
+                const baslangicTarihi = $("#deBaslangicTarihi").val();
+                const bitisTarihi = $("#deBitisTarihi").val();
+
+                const model = {}; //controller a gidecek veri kümesi
+                model.KitapAdiId = kitapAdi;
+                model.BaslangicTarihi = baslangicTarihi === '' ? null : baslangicTarihi;
+                model.BitisTarihi = bitisTarihi === '' ? null : bitisTarihi;
+
+                console.log(model);
+                $.ajax({
+                    url: `/OrtakRaf/Filtrele`,
+                    type: "POST",
+                    dataType: "html",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(model),
+                    processData: false,
+                    cache: false,
+                    success: function(response) {
+                        $("#dvListe").html("");
+                        $("#dvListe").html(response);
+                    }
+                });
+            });
+
+        $(document).ready(function() {
+            $("#btnAktar").click(function(e) {
+                e.preventDefault();
+                var dataRows = [];
+                var SayisalModel = [];
+                $('#ortakRafListe tr').each(function() {
+                    $(this).find("input[type='checkbox']:checked").each(function() {
+                        var satir = [];
+                        const selecteditem = [0, 3, 4, 5, 7];
+                        const indexArr = [];
+                        $(this).closest("td").siblings("td").each(function() {
+                            satir.push(($(this).text().replace(/(\n\t|\t\n|\n|\t|)\s+ /g, "")));
+                        });
+                        satir.push($(this).closest('td').siblings('td').find('input[type="text"]:text').val());
+                        for (let i = 0; i < selecteditem.length; i++) {
+                            indexArr.push(satir[selecteditem[i]]);
+                        }
+                        indexArr.push($(this).closest('td').siblings('td').find('[id*=item_KitapAdi_FIYAT]').val());
+                        dataRows.push(indexArr);
+                    });
+                });
+
+                for (let r = 0; r < dataRows.length; r++) {
+                    SayisalModel.push({
+                        Id: dataRows[r][0],
+                        KitapAdiId: dataRows[r][4],
+                        KAYİTTARİHİ: dataRows[r][1],
+                        KİTAPADİ: dataRows[r][2],
+                        ADET: dataRows[r][3],
+                        FİYAT: dataRows[r][5],
+                        TUTAR: parseFloat(dataRows[r][3] * dataRows[r][5]).toFixed(2),
+                        KDV: parseFloat((dataRows[r][3] * dataRows[r][5]) * 0.18).toFixed(2),
+                        TOPLAMTUTAR: parseFloat((dataRows[r][3] * dataRows[r][5]) * 1.18).toFixed(2)
+                    });
+                }
+
+                SayisalModel = JSON.stringify(SayisalModel);
+                $.ajax({
+                    url: `/OrtakRaf/Aktar`,
+                    type: "POST",
+                    datatype: 'html',
+                    contentType: "application/x-www-form-urlencoded",
+                    data: { SayisalModel },
+                    traditional: true,
+                    success: function(data) {
+                        Swal.fire({
+                            position: 'bottom-end',
+                            icon: 'success',
+                            title: `Ortak Raftan Sayısal Kitaba aktarım işlemi gerçekleşti.`,
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
+                        setTimeout(function() {
+                            window.location.href = `/OrtakRaf/Liste`;
+                        },
+                            3000);
+                    },
+                    error: function() {
+                        Swal.fire({
+                            position: 'bottom-end',
+                            icon: 'error',
+                            title: `İşlem başarısız oldu.`,
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}
